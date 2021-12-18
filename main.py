@@ -15,6 +15,8 @@ pennies = input("How many pennies? ")
 # TODO: verify if there is enough money
 
 # TODO: prepare coffee
+print(f"Here is your {coffee_type}. Enjoy your beverage.")
+
 # TODO: update report
 
 # TODO: if input is "report" print amount of water, milk, coffee, money
