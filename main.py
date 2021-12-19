@@ -25,5 +25,12 @@ print(f"Here is your {coffee_type}. Enjoy your beverage.")
 # TODO: update report
 
 # TODO: if input is "report" print amount of water, milk, coffee, money
+def print_report():
+    """Prints report of total amount of money, milk, coffee and water."""
+    print(f"Water {machine_data.resources['water']}ml")
+    print(f"Milk {machine_data.resources['milk']}ml")
+    print(f"Coffee {machine_data.resources['coffee']}g")
+    print(f"Money ${machine_money}")
+
 # TODO: if input is "off" finish game
 # TODO: if input not correct finish game/ ask again
