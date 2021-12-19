@@ -62,6 +62,8 @@ is_game_over = False
 while not is_game_over:
     user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 
+    # ToDo what if there is not enough water and  milk etc...
+
     if user_choice in ["espresso", "latte", "cappuccino"]:
         coffee_functionality(user_choice)
     elif user_choice == "report":
