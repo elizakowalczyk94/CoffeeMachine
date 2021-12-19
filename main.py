@@ -42,18 +42,21 @@ def coffee_functionality(coffee_type):
     user_nickles = int(input("How many nickles? "))
     user_pennies = int(input("How many pennies? "))
     total_user_coins = calculate_coins(user_quarters, user_dimes, user_nickles, user_pennies)
+    user_change = total_user_coins - machine_data.MENU[coffee_type]['cost']
 
     if total_user_coins < machine_data.MENU[coffee_type]["cost"]:
         print("Sorry that's not enough money. Money refunded.")
     else:
-        print(f"Here is ${total_user_coins - machine_data.MENU[coffee_type]['cost']:.2f} in change.")
+        print(f"Here is ${user_change:.2f} in change.")
 
         machine_data.resources["water"] -= machine_data.MENU[coffee_type]["ingredients"]["water"]
-        machine_data.resources["milk"] -= machine_data.MENU[coffee_type]["ingredients"]["milk"]
         machine_data.resources["coffee"] -= machine_data.MENU[coffee_type]["ingredients"]["coffee"]
-        machine_data.resources["money"] += total_user_coins
+        if coffee_type != "espresso":
+            machine_data.resources["milk"] -= machine_data.MENU[coffee_type]["ingredients"]["milk"]
+        machine_data.resources["money"] += (total_user_coins - user_change)
 
         print(f"Here is your {coffee_type}. Enjoy your beverage.")
+
 
 is_game_over = False
 while not is_game_over:
@@ -65,3 +68,4 @@ while not is_game_over:
         print_report()
     elif user_choice == "off":
         is_game_over = True
+        print("Good Bye! See you soon.")
