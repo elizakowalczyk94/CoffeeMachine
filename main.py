@@ -7,16 +7,12 @@ def calculate_coins(quarters, dimes, nickles, pennies):
     return total
 
 
-def input_off():
-    is_game_over = True
-
-
 def print_report():
     """Prints report of total amount of money, milk, coffee and water."""
     print(f"Water {machine_data.resources['water']}ml")
     print(f"Milk {machine_data.resources['milk']}ml")
     print(f"Coffee {machine_data.resources['coffee']}g")
-    print(f"Money ${machine_money:.2f}")
+    print(f"Money ${machine_data.resources['money']:.2f}")
 
 
 def verify_input(user_input, correct_input):
@@ -39,29 +35,33 @@ def verify_resources(water_needed, coffee_needed, milk_needed):
         return False
 
 
-coffee_type = input("What would you like? (espresso/latte/cappuccino) ")
-coffee_data = machine_data.MENU[coffee_type]
+def coffee_functionality(coffee_type):
+    print("Please insert coins.")
+    user_quarters = int(input("How many quarters? "))
+    user_dimes = int(input("How many dimes? "))
+    user_nickles = int(input("How many nickles? "))
+    user_pennies = int(input("How many pennies? "))
+    total_user_coins = calculate_coins(user_quarters, user_dimes, user_nickles, user_pennies)
 
-print("Please insert coins.")
-user_quarters = int(input("How many quarters? "))
-user_dimes = int(input("How many dimes? "))
-user_nickles = int(input("How many nickles? "))
-user_pennies = int(input("How many pennies? "))
-total_user_coins = calculate_coins(user_quarters, user_dimes, user_nickles, user_pennies)
+    if total_user_coins < machine_data.MENU[coffee_type]["cost"]:
+        print("Sorry that's not enough money. Money refunded.")
+    else:
+        print(f"Here is ${total_user_coins - machine_data.MENU[coffee_type]['cost']:.2f} in change.")
 
-machine_money = 0
+        machine_data.resources["water"] -= machine_data.MENU[coffee_type]["ingredients"]["water"]
+        machine_data.resources["milk"] -= machine_data.MENU[coffee_type]["ingredients"]["milk"]
+        machine_data.resources["coffee"] -= machine_data.MENU[coffee_type]["ingredients"]["coffee"]
+        machine_data.resources["money"] += total_user_coins
+
+        print(f"Here is your {coffee_type}. Enjoy your beverage.")
+
 is_game_over = False
+while not is_game_over:
+    user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 
-if total_user_coins < machine_data.MENU[coffee_type]["cost"]:
-    print("Sorry that's not enough money. Money refunded.")
-else:
-    print(f"Here is ${total_user_coins - machine_data.MENU[coffee_type]['cost']:.2f} in change.")
-
-    machine_data.resources["water"] -= machine_data.MENU[coffee_type]["ingredients"]["water"]
-    machine_data.resources["milk"] -= machine_data.MENU[coffee_type]["ingredients"]["milk"]
-    machine_data.resources["coffee"] -= machine_data.MENU[coffee_type]["ingredients"]["coffee"]
-    machine_money += total_user_coins
-
-    print(f"Here is your {coffee_type}. Enjoy your beverage.")
-
-# possible inputs: off, report, coffee type, other wrong input
+    if user_choice in ["espresso", "latte", "cappuccino"]:
+        coffee_functionality(user_choice)
+    elif user_choice == "report":
+        print_report()
+    elif user_choice == "off":
+        is_game_over = True
