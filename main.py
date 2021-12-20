@@ -9,10 +9,11 @@ def calculate_coins(quarters, dimes, nickles, pennies):
 
 def print_report():
     """Prints report of total amount of money, milk, coffee and water."""
-    print(f"Water {machine_data.resources['water']}ml")
-    print(f"Milk {machine_data.resources['milk']}ml")
-    print(f"Coffee {machine_data.resources['coffee']}g")
-    print(f"Money ${machine_data.resources['money']:.2f}")
+    for ingredient, amount in machine_data.resources.items():
+        if amount < 0:
+            print(f"{ingredient.capitalize()} 0ml")
+        else:
+            print(f"{ingredient.capitalize()} {amount}ml")
 
 
 def verify_input(user_input, correct_input):
