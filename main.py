@@ -9,10 +9,11 @@ def calculate_coins(quarters, dimes, nickles, pennies):
 
 def print_report():
     """Prints report of total amount of money, milk, coffee and water."""
-    print(f"Water {machine_data.resources['water']}ml")
-    print(f"Milk {machine_data.resources['milk']}ml")
-    print(f"Coffee {machine_data.resources['coffee']}g")
-    print(f"Money ${machine_data.resources['money']:.2f}")
+    for ingredient, amount in machine_data.resources.items():
+        if amount < 0:
+            print(f"{ingredient.capitalize()} 0ml")
+        else:
+            print(f"{ingredient.capitalize()} {amount}ml")
 
 
 def verify_input(user_input, correct_input):
@@ -23,19 +24,23 @@ def verify_input(user_input, correct_input):
         return False
 
 
-def verify_resources(water_needed, coffee_needed, milk_needed):
+def verify_resources(coffee_ordered):
     """Returns True if there is enough water, coffee and milk in machine_data.resources."""
 
-    water_left = machine_data.resources["water"] - water_needed
-    coffee_left = machine_data.resources["coffee"] - coffee_needed
-    milk_left = machine_data.resources["milk"] - milk_needed
-    if water_left > 0 and coffee_left > 0 and milk_left > 0:
-        return True
+    water_left = machine_data.resources["water"] - machine_data.MENU[coffee_ordered]["ingredients"]["water"]
+    coffee_left = machine_data.resources["coffee"] - machine_data.MENU[coffee_ordered]["ingredients"]["coffee"]
+    if coffee_ordered != "espresso":
+        milk_left = machine_data.resources["milk"] - machine_data.MENU[coffee_ordered]["ingredients"]["milk"]
+        if water_left >= 0 and coffee_left >= 0 and milk_left >= 0:
+            return True
+    elif coffee_ordered == "espresso":
+        if water_left >= 0 and coffee_left >= 0:
+            return True
     else:
         return False
 
 
-def coffee_functionality(coffee_type):
+def make_coffee(coffee_type):
     print("Please insert coins.")
     user_quarters = int(input("How many quarters? "))
     user_dimes = int(input("How many dimes? "))
@@ -62,12 +67,15 @@ is_game_over = False
 while not is_game_over:
     user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 
-    # ToDo what if there is not enough water and  milk etc...
-
     if user_choice in ["espresso", "latte", "cappuccino"]:
-        coffee_functionality(user_choice)
+        if verify_resources(user_choice):
+            make_coffee(user_choice)
+        else:
+            print("Not enough resources.")
     elif user_choice == "report":
         print_report()
     elif user_choice == "off":
         is_game_over = True
         print("Good Bye! See you soon.")
+    else:
+        print("Wrong input. Try once again.")
