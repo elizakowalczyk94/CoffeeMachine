@@ -62,10 +62,10 @@ is_game_over = False
 while not is_game_over:
     user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 
-    # ToDo what if there is not enough water and  milk etc...
-
     if user_choice in ["espresso", "latte", "cappuccino"]:
-        if enough water:
+        if verify_resources(machine_data.resources["water"],
+                            machine_data.resources["coffee"],
+                            machine_data.resources["milk"]):
             make_coffee(user_choice)
         else:
             print("Not enough resources.")
@@ -74,3 +74,5 @@ while not is_game_over:
     elif user_choice == "off":
         is_game_over = True
         print("Good Bye! See you soon.")
+    else:
+        print("Wrong input. Try once again.")
