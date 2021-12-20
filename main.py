@@ -35,7 +35,7 @@ def verify_resources(water_needed, coffee_needed, milk_needed):
         return False
 
 
-def coffee_functionality(coffee_type):
+def make_coffee(coffee_type):
     print("Please insert coins.")
     user_quarters = int(input("How many quarters? "))
     user_dimes = int(input("How many dimes? "))
@@ -65,7 +65,10 @@ while not is_game_over:
     # ToDo what if there is not enough water and  milk etc...
 
     if user_choice in ["espresso", "latte", "cappuccino"]:
-        coffee_functionality(user_choice)
+        if enough water:
+            make_coffee(user_choice)
+        else:
+            print("Not enough resources.")
     elif user_choice == "report":
         print_report()
     elif user_choice == "off":
