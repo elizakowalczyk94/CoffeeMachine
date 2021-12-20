@@ -23,14 +23,18 @@ def verify_input(user_input, correct_input):
         return False
 
 
-def verify_resources(water_needed, coffee_needed, milk_needed):
+def verify_resources(coffee_ordered):
     """Returns True if there is enough water, coffee and milk in machine_data.resources."""
 
-    water_left = machine_data.resources["water"] - water_needed
-    coffee_left = machine_data.resources["coffee"] - coffee_needed
-    milk_left = machine_data.resources["milk"] - milk_needed
-    if water_left > 0 and coffee_left > 0 and milk_left > 0:
-        return True
+    water_left = machine_data.resources["water"] - machine_data.MENU[coffee_ordered]["ingredients"]["water"]
+    coffee_left = machine_data.resources["coffee"] - machine_data.MENU[coffee_ordered]["ingredients"]["coffee"]
+    if coffee_ordered != "espresso":
+        milk_left = machine_data.resources["milk"] - machine_data.MENU[coffee_ordered]["ingredients"]["milk"]
+        if water_left >= 0 and coffee_left >= 0 and milk_left >= 0:
+            return True
+    elif coffee_ordered == "espresso":
+        if water_left >= 0 and coffee_left >= 0:
+            return True
     else:
         return False
 
@@ -63,9 +67,7 @@ while not is_game_over:
     user_choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
 
     if user_choice in ["espresso", "latte", "cappuccino"]:
-        if verify_resources(machine_data.resources["water"],
-                            machine_data.resources["coffee"],
-                            machine_data.resources["milk"]):
+        if verify_resources(user_choice):
             make_coffee(user_choice)
         else:
             print("Not enough resources.")
